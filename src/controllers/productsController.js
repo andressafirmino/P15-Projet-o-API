@@ -28,17 +28,32 @@ export async function cart(req, res) {
 
 // TESTE PRO FRONT USAR REQUISIÇÕES
 export function loadAllProducts (req, res){
-    res.send(allProducts);
+
+    const homeAllproducts = allProducts.map((product)=>{
+        return { images: product.images[0], 
+                 name: product.name, 
+                 value: product.value, 
+                 sector: product.sector
+                }
+    })
+    console.log(homeAllproducts);
+    res.send(homeAllproducts);
 }
-export function loadJantarProducts (req, res){
-    res.send(jantarProducts);
-}
-export function loadReuniaoProducts (req, res){
-    res.send(reuniaoProducts);
-}
-export function loadJardimProducts (req, res){
-    res.send(jardimProducts);
-}
-export function loadInfantilProducts (req, res){
-    res.send(infantilProducts);
+export function loadSectorProducts (req, res){
+    console.log(req.params)
+
+    const {sector} =req.params;
+
+    const homeAllproducts = allProducts.map((product)=>{
+        return { images: product.images[0], 
+                 name: product.name, 
+                 value: product.value, 
+                 sector: product.sector
+                }
+    });
+
+    const sectorProducts = homeAllproducts.filter((product)=> product.sector === sector);
+
+
+    res.send(sectorProducts);
 }
