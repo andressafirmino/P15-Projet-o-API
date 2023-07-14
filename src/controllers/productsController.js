@@ -30,7 +30,8 @@ export async function loadAllProducts (req, res){
             return { images: product.images[0], 
                      name: product.name, 
                      value: product.value, 
-                     sector: product.sector
+                     sector: product.sector,
+                     id: product._id
                     }
         })
         console.log(homeAllproducts);
@@ -50,7 +51,8 @@ export async function loadSectorProducts (req, res){
             return { images: product.images[0], 
                      name: product.name, 
                      value: product.value, 
-                     sector: product.sector
+                     sector: product.sector,
+                     id: product._id
                     }
         });
 
