@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { db } from "../database/databaseconnections.js";
 
 export async function cart(req, res) {
@@ -15,13 +16,6 @@ export async function cart(req, res) {
     }
 }
 
-
-
-
-
-
-
-// TESTE PRO FRONT USAR REQUISIÇÕES
 export async function loadAllProducts (req, res){
 
     try{
@@ -42,6 +36,7 @@ export async function loadAllProducts (req, res){
     }
 
 }
+
 export async function loadSectorProducts (req, res){
     const {sector} =req.params;
 
@@ -64,4 +59,18 @@ export async function loadSectorProducts (req, res){
 
 
 
+}
+
+export async function loadSingleProduct (req ,res){
+    const {id} = req.body;
+
+    try{
+
+        const singleProduct = await db.collection('allProducts').findOne({_id: new ObjectId(id)});
+        res.send(singleProduct);
+
+    }catch(err){
+        console.log(err.message)
+        res.status(500).send(err.message);
+    }
 }
