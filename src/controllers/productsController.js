@@ -1,9 +1,4 @@
 import { db } from "../database/databaseconnections.js";
-import allProducts from "../data/allProducts.js";
-import jantarProducts from "../data/jantarProducts.js";
-import reuniaoProducts from "../data/reuniaoProducts.js";
-import jardimProducts from "../data/jardimProducts.js";
-import infantilProducts from "../data/infantilProducts.js";
 
 export async function cart(req, res) {
     const { authorization } = req.headers;
@@ -27,33 +22,44 @@ export async function cart(req, res) {
 
 
 // TESTE PRO FRONT USAR REQUISIÇÕES
-export function loadAllProducts (req, res){
+export async function loadAllProducts (req, res){
 
-    const homeAllproducts = allProducts.map((product)=>{
-        return { images: product.images[0], 
-                 name: product.name, 
-                 value: product.value, 
-                 sector: product.sector
-                }
-    })
-    console.log(homeAllproducts);
-    res.send(homeAllproducts);
+    try{
+        const allProducts = await db.collection('allProducts').find().toArray();
+        const homeAllproducts = allProducts.map((product)=>{
+            return { images: product.images[0], 
+                     name: product.name, 
+                     value: product.value, 
+                     sector: product.sector
+                    }
+        })
+        console.log(homeAllproducts);
+        res.send(homeAllproducts);
+
+    }catch(err){
+        console.log(err.message);
+    }
+
 }
-export function loadSectorProducts (req, res){
-    console.log(req.params)
-
+export async function loadSectorProducts (req, res){
     const {sector} =req.params;
 
-    const homeAllproducts = allProducts.map((product)=>{
-        return { images: product.images[0], 
-                 name: product.name, 
-                 value: product.value, 
-                 sector: product.sector
-                }
-    });
+    try{
+        const allProducts = await db.collection('allProducts').find().toArray();
+        const homeAllproducts = allProducts.map((product)=>{
+            return { images: product.images[0], 
+                     name: product.name, 
+                     value: product.value, 
+                     sector: product.sector
+                    }
+        });
 
-    const sectorProducts = homeAllproducts.filter((product)=> product.sector === sector);
+        const sectorProducts = homeAllproducts.filter((product)=> product.sector === sector);
+        res.send(sectorProducts);
+    }catch(err){
+        console.log(err.message);
+    }
 
 
-    res.send(sectorProducts);
+
 }
