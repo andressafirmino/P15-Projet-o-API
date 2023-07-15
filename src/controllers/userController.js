@@ -1,11 +1,12 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from "uuid";
 import { db } from "../database/databaseconnections.js";
+import jwt from 'jsonwebtoken';
 
 
 export async function signup(req, res) {
     const { name, email } = req.body
-    console.log(req.body)   
+    console.log(req.body)
 
     try {
         let user = await db.collection('users').findOne({ email });
@@ -36,11 +37,17 @@ export async function signin(req, res) {
         const correctPassword = bcrypt.compareSync(password, user.password);
         if (!correctPassword) return res.status(401).send("Usuário e/ou senha incorretos!");
 
-        const token = uuid();
+        //const token = uuid();
+        const dados = { userId: user._id };
+        const chaveSecreta = process.env.JWT_SECRET;
 
-        db.collection("sessions").insertOne({ userId: user._id, token, });
+        const token = jwt.sign(dados, chaveSecreta, {expiresIn: "1h"});
+        console.log(token)
+        
 
-        res.status(200).send({user:{ token, name: user.name, email: user.email, id: user._id }});
+        //db.collection("sessions").insertOne({ userId: user._id, token, });
+
+        res.status(200).send({ user: { token, name: user.name, email: user.email, id: user._id } });
     }
     catch (error) {
         console.log(error);
