@@ -78,11 +78,11 @@ export async function loadSingleProduct(req, res) {
 } */
 
 export async function checkout(req, res) {
+    const { session } = req.params;
     const {name, email, state, city, neighborhood, address, complement, pay, total, cartProducts } = req.body;
-    const date = new Date();
-
+    const date = new Date(); 
     try {        
-        await db.collection("sales").insertOne({name, email, state, city, neighborhood, address, complement, pay, total, cartProducts, date});
+        await db.collection("sales").insertOne({id: session.user.id, name, email, state, city, neighborhood, address, complement, pay, total, cartProducts, date});
         res.send("OK");
     } catch (err) {
         console.log(err.message)

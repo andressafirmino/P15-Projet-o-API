@@ -1,6 +1,7 @@
 import joi from "joi";
 
 export const checkoutSchema = joi.object({
+    id: joi.string().required(),
     name: joi.string().required(),
     email: joi.string().email().required(),
     state: joi.string().required(), 

@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { db } from "../database/databaseconnections.js";
 import jwt from 'jsonwebtoken';
+import { ObjectId } from 'mongodb';
 
 export async function signup(req, res) {
     const { name, email } = req.body
@@ -75,5 +76,21 @@ export async function address(req, res) {
         console.log(error);
         res.sendStatus(500);
     }
+}
+
+export async function getAddress(req, res){
+   const {id} = res.locals.session.user
+   console.log(id)
+
+   try {
+    let address = await db.collection('address').findOne({id});
+
+    if (!address) return res.sendStatus(404);
+    const addressinfo = { address }
+    res.status(201).send(addressinfo);
+} catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+}
 }
 
