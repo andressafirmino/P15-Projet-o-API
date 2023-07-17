@@ -1,17 +1,19 @@
 import { Router } from "express";
-import { loadAllProducts, loadSectorProducts, loadSingleProduct } from "../controllers/productsController.js";
-import { cart } from "../controllers/productsController.js";
+import { checkout, loadAllProducts, loadSectorProducts, loadSingleProduct } from "../controllers/productsController.js";
+import { validateSchema } from "../middlewares/validateSchema.js";
+import { checkoutSchema } from "../schemas/productsSchemas.js";
+//import { cart } from "../controllers/productsController.js";
 
 
 
 const productsRouter = Router();
 
-productsRouter.get("/carrinho", cart);
-
 productsRouter.get('/', loadAllProducts);
 productsRouter.get('/:sector', loadSectorProducts);
 productsRouter.post('/singleProduct', loadSingleProduct);
 
+//productsRouter.get("/carrinho", cart);
+productsRouter.post("/confirmar-informacao", validateSchema(checkoutSchema), checkout);
 
 
 
