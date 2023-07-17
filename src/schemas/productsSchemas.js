@@ -11,5 +11,5 @@ export const checkoutSchema = joi.object({
     complement: joi.string().required(), 
     pay: joi.string().required(),
     total: joi.number(),
-    cartProducts: joi.array().items(joi.object())
+    cartProducts: joi.array().items(joi.object()).optional()
 })
