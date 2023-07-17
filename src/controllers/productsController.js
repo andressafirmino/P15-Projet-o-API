@@ -78,12 +78,14 @@ export async function loadSingleProduct(req, res) {
 } */
 
 export async function checkout(req, res) {
-    const {name, email, state, city, neighborhood, address, complement, pay } = req.body;
+    const {name, email, state, city, neighborhood, address, complement, pay, total, cartProducts } = req.body;
+    const date = new Date();
 
     try {        
-        await db.collection("sales").insertOne({name, email, state, city, neighborhood, address, complement, pay});
+        await db.collection("sales").insertOne({name, email, state, city, neighborhood, address, complement, pay, total, cartProducts, date});
         res.send("OK");
     } catch (err) {
+        console.log(err.message)
         res.status(500).send(err.message);
     }
 }

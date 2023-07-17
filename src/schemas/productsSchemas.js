@@ -8,5 +8,7 @@ export const checkoutSchema = joi.object({
     neighborhood: joi.string().required(), 
     address: joi.string().required(), 
     complement: joi.string().required(), 
-    pay: joi.string().required()
+    pay: joi.string().required(),
+    total: joi.number(),
+    cartProducts: joi.array().items(joi.object())
 })
