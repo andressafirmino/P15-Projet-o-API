@@ -15,12 +15,12 @@ export async function signup(req, res) {
 
         const passwordHashed = bcrypt.hashSync(req.body.password, 10);
         delete req.body.password;
-        await db.collection("users").insertOne({
+        const cad = await db.collection("users").insertOne({
             name,
             email,
             password: passwordHashed
         });
-        res.status(201).send("Usuário cadastrado com sucesso!");
+        res.status(201).send(cad);
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
@@ -41,9 +41,9 @@ export async function signin(req, res) {
         const dados = { userId: user._id };
         const chaveSecreta = process.env.JWT_SECRET;
 
-        const token = jwt.sign(dados, chaveSecreta, {expiresIn: "1h"});
+        const token = jwt.sign(dados, chaveSecreta, { expiresIn: "1h" });
         console.log(token)
-        
+
 
         //db.collection("sessions").insertOne({ userId: user._id, token, });
 
@@ -52,6 +52,31 @@ export async function signin(req, res) {
     catch (error) {
         console.log(error);
         res.sendStatus(401);
+    }
+}
+
+export async function address(req, res) {
+    const { id, nameAddress, celNumber, state, city, zipCode, district, street, number, othersInfo } = req.body
+    console.log(req.body)
+
+    try {
+
+        await db.collection("address").insertOne({
+            id,
+            nameAddress,
+            zipCode,
+            state,
+            city,
+            street,
+            district,
+            number,
+            celNumber,
+            othersInfo
+        });
+        res.status(201).send("Endereço cadastrado com sucesso!");
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
     }
 }
 
